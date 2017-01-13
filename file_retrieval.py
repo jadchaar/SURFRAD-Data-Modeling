@@ -1,8 +1,9 @@
 import os
 import ftplib
 
+
 def retrieve_files():
-    stationNameArray = ['Alamosa CO', 'Bondvile IL', 'Boulder CO', 'Desert Rock NV',
+    stationNameArray = ['Alamosa CO', 'Bondville IL', 'Boulder CO', 'Desert Rock NV',
                         'Fort Peck MT', 'Goodwin Creek MS', 'Penn State PA',
                         'Rutland VT', 'Sioux Falls SD', 'Wasco OR']
 
@@ -38,30 +39,59 @@ def retrieve_files():
 
     year = input('\nEnter a year: ')
     ftpURLWithYear = year + '/'
+    print('Loading...')
     ftp.cwd(ftpURLWithYear)
 
     print('\nStep 3. Enter Data File(s) to Retrieve')
     print('## Data Files (location acronym | two digits of year | julian day) ##')
     content = ftp.retrlines('NLST')
 
-    filename = input('\nEnter a data file to read: ')
+    downloadAllResponse = input(
+        '\nDownload all files in this directory or only a single one? (all/single) ')
 
-    if filename[(len(filename) - 4):len(filename)] != '.dat':
-        filename += '.dat'
+    if downloadAllResponse == 'all' or downloadAllResponse == 'ALL':
+        # change default directory of FTP storage
+        if not os.path.exists(os.getcwd() + '/ftp_files'):
+            createfolderYorN = input(
+                'Create a folder to store FTP files in current directory? (y/n) ')
+            if createfolderYorN == 'y' or createfolderYorN == 'Y':
+                print('Creating folder...')
+                os.makedirs(os.getcwd() + '/ftp_files')
 
-    # change default directory of FTP storage
-    if not os.path.exists(os.getcwd() + '/ftp_files'):
-        createfolderYorN = input(
-            'Create a folder to store FTP files in current directory? (y/n) ')
-        if createfolderYorN == 'y' or createfolderYorN == 'Y':
-            print('Creating folder...')
-            os.makedirs(os.getcwd() + '/ftp_files')
+        original_directory = os.getcwd()
+        os.chdir(os.getcwd() + '/ftp_files')
 
-    original_directory = os.getcwd()
-    os.chdir(os.getcwd() + '/ftp_files')
+        print('\nTransferring files to ' + os.getcwd())
+        filenames = ftp.nlst()
+        for filename in filenames:
+            # ftp.retrbinary('RETR ' + filename, open(filename, 'wb').write)
+            file = open(filename, 'wb')
+            ftp.retrbinary('RETR ' + filename, file.write)
+            file.close()
+        print('File transfer complete!')
+    elif downloadAllResponse == 'single' or downloadAllResponse == 'SINGLE':
+        filename = input('\nEnter a data file to read: ')
 
-    print('\nTransferring ' + filename + ' to ' + os.getcwd())
-    ftp.retrbinary('RETR ' + filename, open(filename, 'wb').write)
+        if filename[(len(filename) - 4):len(filename)] != '.dat':
+            filename += '.dat'
+
+        # change default directory of FTP storage
+        if not os.path.exists(os.getcwd() + '/ftp_files'):
+            createfolderYorN = input(
+                'Create a folder to store FTP files in current directory? (y/n) ')
+            if createfolderYorN == 'y' or createfolderYorN == 'Y':
+                print('Creating folder...')
+                os.makedirs(os.getcwd() + '/ftp_files')
+
+        original_directory = os.getcwd()
+        os.chdir(os.getcwd() + '/ftp_files')
+
+        print('\nTransferring ' + filename + ' to ' + os.getcwd())
+        # ftp.retrbinary('RETR ' + filename, open(filename, 'wb').write)
+        file = open(filename, 'wb')
+        ftp.retrbinary('RETR ' + filename, file.write)
+        print('File transfer complete!')
+        file.close()
 
     ftp.quit()
 
