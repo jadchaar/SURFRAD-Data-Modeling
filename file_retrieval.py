@@ -1,3 +1,4 @@
+import sys
 import os
 import ftplib
 
@@ -31,7 +32,13 @@ def retrieve_files():
     ftpURL = 'data/radiation/surfrad/' + stationName + '/'
     # FTP change directory
     print('Changing FTP URL to ftp://aftp.cmdl.noaa.gov/' + ftpURL)
-    ftp.cwd(ftpURL)
+    # ftp.cwd(ftpURL)
+    try:
+        ftp.cwd(ftpURL)
+    except ftplib.all_errors as e:
+        print(e)
+        ftp.quit()
+        sys.exit(1)
 
     print('\nStep 2. Enter Year of Data Needed')
     print('## Years ##')
@@ -40,7 +47,12 @@ def retrieve_files():
     year = input('\nEnter a year: ')
     ftpURLWithYear = year + '/'
     print('Loading...')
-    ftp.cwd(ftpURLWithYear)
+    try:
+        ftp.cwd(ftpURLWithYear)
+    except ftplib.all_errors as e:
+        print(e)
+        ftp.quit()
+        sys.exit(1)
 
     print('\nStep 3. Enter Data File(s) to Retrieve')
     print('## Data Files (location acronym | two digits of year | julian day) ##')

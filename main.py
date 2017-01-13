@@ -1,4 +1,4 @@
-from file_retrieval import retrieve_files
-# from plotting import plot_graph
+from file_retrieval import *
+from plotting import *
 
 retrieve_files()

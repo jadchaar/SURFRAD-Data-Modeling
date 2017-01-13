@@ -26,7 +26,6 @@ def plot_graph():
     longitude = float(longitude)
     elevation = int(elevation)
 
-
     yearCol = [int(x[0]) for x in dataArray]
     julianDayCol = [int(x[1]) for x in dataArray]
     monthCol = [int(x[2]) for x in dataArray]
