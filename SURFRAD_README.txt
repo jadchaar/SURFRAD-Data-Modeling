@@ -18,7 +18,7 @@ Updated on July 5, 2002 to explain details of the net solar calculation
 Updated April 13, 1999 -- The UVB processing has been improved to compute
 UVB erythemal-weighted irradiance.  Also, calibration factors derived annually
 from standard instruments at NOAA's Central UV Calibration Facility are applied
-to the network UVB instruments.  This improvement has been applied to all data 
+to the network UVB instruments.  This improvement has been applied to all data
 from the beginning of the data record for each station.  The method used is
 described in the UVB section below.  Before this, a representative factory
 calibration corresponding to a representative solar zenith angle (40 degrees)
