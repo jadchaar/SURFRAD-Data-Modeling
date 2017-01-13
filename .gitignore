@@ -89,3 +89,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# ignore folder containing ftp files
+ftp_files/*
