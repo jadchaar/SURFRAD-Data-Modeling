@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import plotly
 plotly.tools.set_credentials_file(
     username='jadchaar', api_key='vRIzy7SgLxPJOzEYQzvM')
-plotly.tools.set_config_file(world_readable=True,
-                             sharing='public')
+plotly.tools.set_config_file(world_readable=True, sharing='public')
 import plotly.plotly as py
 from plotly.graph_objs import *
 

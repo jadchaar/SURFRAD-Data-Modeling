@@ -1,15 +1,15 @@
 import os
-from ftplib import FTP
+import ftplib
 
-stationNameArray = ['Alamosa CO', 'Bondvile IL',
-                    'Boulder CO', 'Desert Rock NV', 'Fort Peck MT',
-                    'Goodwin Creek MS', 'Penn State PA', 'Rutland VT',
-                    'Sioux Falls SD', 'Wasco OR']
+stationNameArray = ['Alamosa CO', 'Bondvile IL', 'Boulder CO', 'Desert Rock NV',
+                    'Fort Peck MT', 'Goodwin Creek MS', 'Penn State PA',
+                    'Rutland VT', 'Sioux Falls SD', 'Wasco OR']
 
 # log into FTP
-ftp = FTP('aftp.cmdl.noaa.gov')
+ftp = ftplib.FTP('aftp.cmdl.noaa.gov')
 print('Logging into FTP...')
 ftp.login()
+print('FTP LOGIN SUCCESSFUL!')
 
 print('\n### PLOTTING PROGRAM ###\n')
 print('Step 1. Input SURFRAD Station Location')
@@ -58,7 +58,7 @@ if not os.path.exists(os.getcwd() + '/ftp_files') or os.path.exists(os.getcwd() 
 original_directory = os.getcwd()
 os.chdir(os.getcwd() + '/ftp_files')
 
-print('\nReading >>' + filename + '<< ...')
+print('\nTransferring ' + filename + ' to ' + os.getcwd())
 ftp.retrbinary('RETR ' + filename, open(filename, 'wb').write)
 
 ftp.quit()
