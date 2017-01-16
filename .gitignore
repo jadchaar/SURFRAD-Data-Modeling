@@ -92,3 +92,6 @@ ENV/
 
 # ignore folder containing ftp files
 ftp_files/*
+
+# ignore config file with usernames and API keys
+/config.ini

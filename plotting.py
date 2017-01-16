@@ -1,12 +1,21 @@
+import configparser
+
 # import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+
 # plotly configuration
 import plotly
+# input plotly username and API key
+plotly_info = configparser.ConfigParser()
+plotly_info.read('config.ini')
+plotly_username = "'" + plotly_info.get('PlotlyInfo', 'username') + "'"
+plotly_api_key = "'" + plotly_info.get('PlotlyInfo', 'api_key') + "'"
 plotly.tools.set_credentials_file(
-    username='jadchaar', api_key='vRIzy7SgLxPJOzEYQzvM')
+    username=plotly_username, api_key=plotly_api_key)
 plotly.tools.set_config_file(world_readable=True, sharing='public')
 import plotly.plotly as py
 from plotly.graph_objs import *
+
 
 def plot_graph():
     with open('psu17001.dat', 'r') as f:
@@ -78,4 +87,4 @@ def plot_graph():
         }
     }
     fig = Figure(data=data, layout=layout)
-    plot_url = py.plot(fig)
+    plot_url = py.iplot(fig)
