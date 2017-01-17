@@ -40,6 +40,7 @@ def retrieve_files():
         sys.exit(1)
 
     print('\nStep 2. Enter Year of Data Needed')
+    print('\n Loading available years of data...')
     print('## Years ##')
     content = ftp.retrlines('NLST')
 
