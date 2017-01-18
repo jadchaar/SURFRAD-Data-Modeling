@@ -1,9 +1,7 @@
+#!~/anaconda/envs/plotting/bin/python
 import configparser
 import os
-# import numpy as np
-# import matplotlib.pyplot as plt
-
-# plotly configuration
+import pickle
 import plotly
 # input plotly username and API key
 plotly_info = configparser.ConfigParser()
@@ -14,7 +12,7 @@ plotly.tools.set_credentials_file(
     username=plotly_username, api_key=plotly_api_key)
 plotly.tools.set_config_file(world_readable=True, sharing='public')
 import plotly.plotly as py
-from plotly.graph_objs import *
+from plotly.graph_objs import *  # noqa: H303
 
 
 def plot_graph():
@@ -22,6 +20,7 @@ def plot_graph():
     print('Step 3. Choose data to plot')
     print('\nListing available data files for plotting...\n')
 
+    originalPath = os.getcwd()
     os.chdir(os.getcwd() + '/ftp_files')
     print('## Data ##\n', *os.listdir(os.getcwd()), sep=' | ', end=' |\n')
 
@@ -36,18 +35,29 @@ def plot_graph():
         if fileToRead == '':
             print('Error: Please input a valid filename!')
             continue
-        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] != '.dat' and (len(fileToRead) < 8 or len(fileToRead) > 8):
-            print('Error: Please input a valid filename!')
-            continue
-        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] == '.dat' and (len(fileToRead) < 12 or len(fileToRead) > 12):
-            print('Error: Please input a valid filename!')
-            continue
+        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] != '.dat':
+            if len(fileToRead) == 8:
+                print('\n', fileToRead, 'valid! Reading...')
+                break
+            else:
+                print('Error: Please input a valid filename!')
+                continue
+
+        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] == '.dat':
+            if len(fileToRead) == 12:
+                print('\n', fileToRead, 'valid! Reading...')
+                break
+            else:
+                print('Error: Please input a valid filename!')
+                continue
         else:
+            print('\n', fileToRead, 'valid! Reading...')
             break
 
     if fileToRead[(len(fileToRead) - 4):len(fileToRead)] != '.dat':
         fileToRead += '.dat'
-    print('\nReading', fileToRead, '...')
+
+    # print('\nReading', fileToRead, '...')
 
     # with open('psu17001.dat', 'r') as f:
     with open(fileToRead, 'r') as f:
@@ -61,7 +71,6 @@ def plot_graph():
         f.close()
 
     # Extract data from second line
-    # latitude, longitude, elevation = secondLine.split("  ")[:3]
     latitude, longitude, elevation = secondLine.split()[:3]
     elevation = elevation.replace(" m version 1", "")
     latitude = float(latitude)
@@ -117,29 +126,46 @@ def plot_graph():
             yAxisData = [float(x[i]) for x in dataArray]
             dataVarChosen = plottingOptions[i]
 
-    # Plot Downwelling Solar Radiation in matplotlib
-    # Check with this: https://www.esrl.noaa.gov/gmd/grad/surfrad/dataplot.html
-    # plt.plot(decimalTime, dwSolar)
-    # plotTitle = 'Downwelling Solar (Lat: ' + \
-    #     str(latitude) + ' Lon: ' + str(longitude) + ')'
-    # plt.title(plotTitle)
-    # plt.xlim(0, 24)
-    # plt.ylabel('Downwelling Solar')
-    # plt.xlabel('Hour of Day (UTC)')
-    # plt.show()
+    plottingOptions = ['year', 'julianDay', 'month', 'day', 'hour', 'minute',
+                       'decimalTime', 'zenith', 'dwSolar', 'uwSolar',
+                       'directNormal', 'diffuseSolar', 'dwInfrared',
+                       'dwInfraredCaseTemp', 'dwInfraredDomeTemp',
+                       'uwInfrared', 'uwInfraredCaseTemp',
+                       'uwInfraredDomeTemp', 'ultravioletB',
+                       'photosyntheticActiveRad', 'netSolar', 'netInfrared',
+                       'netRadiation', 'airTemp', 'relativeHumidity',
+                       'windSpeed', 'windDirection', 'pressure']
+
+    os.chdir(originalPath)
+
+    with open('data-name-dictionary.txt', 'rb') as d:
+        dataNames = pickle.loads(d.read())
+
+    with open('station-name-dictionary.txt', 'rb') as d:
+        stationNames = pickle.loads(d.read())
+
+    # dataNameInput = "'" + dataVarChosen + "'"
+    # stationNameInput = "'" + fileToRead.strip()[:3] + "'"
+
+    dataNameInput = dataNames[dataVarChosen]
+    stationNameInput = stationNames[fileToRead.strip()[:3]]
+
+    # plotTitle = '"' + dataNameInput + ' - ' + stationNameInput + '"'
+    plotTitle = dataNameInput + ' - ' + stationNameInput
 
     trace1 = {
         "x": decimalTime,
         # "y": dwSolar,
         "y": yAxisData,
         "mode": "lines",
-        "name": "Downwelling Solar - Penn State",
+        # "name": "Downwelling Solar - Penn State",
+        "name": plotTitle,
         "type": "scatter"
     }
     data = Data([trace1])
     layout = {
-        # "title": "Downwelling Solar for Penn State, PA on January 1, 2017",
-        "title": dataVarChosen,
+        # "title": "Downwelling Solar for Penn State on January 1, 2017",
+        "title": plotTitle,
         "xaxis": {
             "autorange": True,
             "title": "Hour of Day (UTC)",
@@ -148,7 +174,7 @@ def plot_graph():
         "yaxis": {
             "autorange": True,
             # "title": "Downwelling Solar Radiation (W/m^2)",
-            "title": dataVarChosen,
+            "title": dataNameInput,
             "type": "linear"
         }
     }
