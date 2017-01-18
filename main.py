@@ -1,3 +1,4 @@
+import sys
 from file_retrieval import *
 from plotting import *
 
@@ -25,3 +26,30 @@ if getFiles in {'y','Y','YES','yes','Yes'}:
     retrieve_files()
 else:
     plot_graph()
+
+# Ask if the user wants to enter the plotting program again
+while True:
+    try:
+        anotherPlot = str(
+            input('Generate another plot? (y/n) '))
+    except ValueError:
+        print('Error: Please input a valid option (y/n)!')
+        continue
+
+    if anotherPlot == '':
+        print('Error: Please input a valid option (y/n)!')
+        continue
+    elif anotherPlot in {'y','Y','YES','yes','Yes'}:
+        break
+    elif anotherPlot in {'n','N','NO','no','No'}:
+        break
+    else:
+        print('Error: Please input a valid option (y/n)!')
+        continue
+
+if anotherPlot in {'y','Y','YES','yes','Yes'}:
+    print('Initiating plotting program...')
+    plot_graph()
+else:
+    print('Exiting program...')
+    sys.exit(0)
