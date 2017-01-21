@@ -35,7 +35,7 @@ def plot_graph():
         if fileToRead == '':
             print('Error: Please input a valid filename!')
             continue
-        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] != '.dat':
+        elif fileToRead[-4:] != '.dat':
             if len(fileToRead) == 8:
                 print('\n', fileToRead, 'valid! Reading...')
                 break
@@ -43,7 +43,7 @@ def plot_graph():
                 print('Error: Please input a valid filename!')
                 continue
 
-        elif fileToRead[(len(fileToRead) - 4):len(fileToRead)] == '.dat':
+        elif fileToRead[-4:] == '.dat':
             if len(fileToRead) == 12:
                 print('\n', fileToRead, 'valid! Reading...')
                 break

@@ -1,6 +1,14 @@
+from file_retrieval import retrieve_files
+from generate_dictionary import form_dict
+import os.path
+from plotting import plot_graph
 import sys
-from file_retrieval import *
-from plotting import *
+
+print('Checking for and generating required dependencies if necessary...\n')
+for i in {'data-name-dictionary.txt', 'station-name-dictionary.txt', 'station-abbreviation-dictionary.txt'}:
+    if not(os.path.isfile(i)):
+        form_dict()
+        break
 
 while True:
     try:
@@ -53,3 +61,5 @@ if anotherPlot in {'y','Y','YES','yes','Yes'}:
 else:
     print('Exiting program...')
     sys.exit(0)
+
+p.terminate()
