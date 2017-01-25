@@ -1,19 +1,42 @@
 from file_retrieval import retrieve_files
 from generate_dictionary import form_dict
-import os.path
+# import os.path
+import os
 from plotting import plot_graph
 import sys
 
 print('Checking for and generating required dependencies if necessary...\n')
-for i in {'data-name-dictionary.txt', 'station-name-dictionary.txt', 'station-abbreviation-dictionary.txt'}:
-    if not(os.path.isfile(i)):
-        form_dict()
-        break
+
+fileContents = os.listdir(os.getcwd())
+fileContents = set(fileContents)
+
+checkNames = {'data-name-dictionary.json', 'station-name-dictionary.json', 'station-abbreviation-dictionary.json'}
+if fileContents.isdisjoint(checkNames):
+    form_dict()
+else:
+    while True:
+        try:
+            jsonOverride = str(input('Previously generated dictionaries found. Override? (y/n) '))
+        except ValueError:
+            print('Error: Please input a valid option (y/n)!')
+            continue
+
+        if jsonOverride == '':
+            print('Error: Please input a valid option (y/n)!')
+            continue
+        elif jsonOverride in {'y', 'Y', 'YES', 'yes', 'Yes'}:
+            form_dict()
+            break
+        elif jsonOverride in {'n', 'N', 'NO', 'no', 'No'}:
+            break
+        else:
+            print('Error: Please input a valid option (y/n)!')
+            continue
 
 while True:
     try:
         getFiles = str(
-            input('Retrieve data files from the SURFRAD FTP server? (y/n) '))
+            input('\nRetrieve data files from the SURFRAD FTP server? (y/n) '))
     except ValueError:
         print('Error: Please input a valid option (y/n)!')
         continue
@@ -21,15 +44,15 @@ while True:
     if getFiles == '':
         print('Error: Please input a valid option (y/n)!')
         continue
-    elif getFiles in {'y','Y','YES','yes','Yes'}:
+    elif getFiles in {'y', 'Y', 'YES', 'yes', 'Yes'}:
         break
-    elif getFiles in {'n','N','NO','no','No'}:
+    elif getFiles in {'n', 'N', 'NO', 'no', 'No'}:
         break
     else:
         print('Error: Please input a valid option (y/n)!')
         continue
 
-if getFiles in {'y','Y','YES','yes','Yes'}:
+if getFiles in {'y', 'Y', 'YES', 'yes', 'Yes'}:
     print('Initiating file retrieval program...')
     retrieve_files()
 else:
@@ -47,15 +70,15 @@ while True:
     if anotherPlot == '':
         print('Error: Please input a valid option (y/n)!')
         continue
-    elif anotherPlot in {'y','Y','YES','yes','Yes'}:
+    elif anotherPlot in {'y', 'Y', 'YES', 'yes', 'Yes'}:
         break
-    elif anotherPlot in {'n','N','NO','no','No'}:
+    elif anotherPlot in {'n', 'N', 'NO', 'no', 'No'}:
         break
     else:
         print('Error: Please input a valid option (y/n)!')
         continue
 
-if anotherPlot in {'y','Y','YES','yes','Yes'}:
+if anotherPlot in {'y', 'Y', 'YES', 'yes', 'Yes'}:
     print('Initiating plotting program...')
     plot_graph()
 else:

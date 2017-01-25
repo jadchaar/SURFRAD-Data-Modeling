@@ -1,5 +1,5 @@
-import pickle
-
+import json
+import sys
 
 def form_dict():
     fullDataNameDictionary = {
@@ -71,11 +71,15 @@ def form_dict():
         'Sioux Falls SD': 'sxf'
     }
 
-    with open('data-name-dictionary.txt', 'wb') as d:
-        pickle.dump(fullDataNameDictionary, d)
+    try:
+        with open('data-name-dictionary.json', 'w') as d:
+            json.dump(fullDataNameDictionary, d, ensure_ascii=False)
 
-    with open('station-name-dictionary.txt', 'wb') as d:
-        pickle.dump(stationNameDictionary, d)
+        with open('station-name-dictionary.json', 'w') as d:
+            json.dump(stationNameDictionary, d, ensure_ascii=False)
 
-    with open('station-abbreviation-dictionary.txt', 'wb') as d:
-        pickle.dump(stationAbbreviationDictionary, d)
+        with open('station-abbreviation-dictionary.json', 'w') as d:
+            json.dump(stationAbbreviationDictionary, d, ensure_ascii=False)
+    except Exception as e:
+        print(e)
+        sys.exit(1)
