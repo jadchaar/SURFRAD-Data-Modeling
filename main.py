@@ -1,6 +1,5 @@
 from file_retrieval import retrieve_files
 from generate_dictionary import form_dict
-# import os.path
 import os
 from plotting import plot_graph
 import sys
