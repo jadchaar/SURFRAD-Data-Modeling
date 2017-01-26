@@ -1,6 +1,6 @@
 #!~/anaconda/envs/data_processing/bin/python
 from dateutil import parser
-import pickle
+import json
 import time
 
 while True:
@@ -29,8 +29,8 @@ elif len(julianDay) == 2:
 # Extract the last two digits of year
 year = year[2:]
 
-with open('station-abbreviation-dictionary.txt', 'rb') as dt:
-    stationAbbreviations = pickle.loads(dt.read())
+with open('station-abbreviation-dictionary.json', 'r') as d:
+    stationAbbreviations = json.load(d)
 
 while True:
     try:

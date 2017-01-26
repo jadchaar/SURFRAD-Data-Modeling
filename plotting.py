@@ -1,7 +1,6 @@
 #!~/anaconda/envs/plotting/bin/python
 import configparser
 import os
-# import pickle
 import json
 import plotly
 # input plotly username and API key
@@ -106,23 +105,7 @@ def plot_graph():
                 yAxisData = [float(x[i]) for x in dataArray]
                 dataVarChosen = plottingOptions[i]
 
-    plottingOptions = ['year', 'julianDay', 'month', 'day', 'hour', 'minute',
-                       'decimalTime', 'zenith', 'dwSolar', 'uwSolar',
-                       'directNormal', 'diffuseSolar', 'dwInfrared',
-                       'dwInfraredCaseTemp', 'dwInfraredDomeTemp',
-                       'uwInfrared', 'uwInfraredCaseTemp',
-                       'uwInfraredDomeTemp', 'ultravioletB',
-                       'photosyntheticActiveRad', 'netSolar', 'netInfrared',
-                       'netRadiation', 'airTemp', 'relativeHumidity',
-                       'windSpeed', 'windDirection', 'pressure']
-
     os.chdir(originalPath)
-
-    # with open('data-name-dictionary.txt', 'rb') as d:
-    #     dataNames = pickle.loads(d.read())
-    #
-    # with open('station-name-dictionary.txt', 'rb') as d:
-    #     stationNames = pickle.loads(d.read())
 
     with open('data-name-dictionary.json', 'r') as d:
         dataNames = json.load(d)
@@ -130,27 +113,20 @@ def plot_graph():
     with open('station-name-dictionary.json', 'r') as d:
         stationNames = json.load(d)
 
-    # dataNameInput = "'" + dataVarChosen + "'"
-    # stationNameInput = "'" + fileToRead.strip()[:3] + "'"
-
     dataNameInput = dataNames[dataVarChosen]
     stationNameInput = stationNames[fileToRead.strip()[:3]]
 
-    # plotTitle = '"' + dataNameInput + ' - ' + stationNameInput + '"'
     plotTitle = dataNameInput + ' - ' + stationNameInput
 
     trace1 = {
         "x": decimalTime,
-        # "y": dwSolar,
         "y": yAxisData,
         "mode": "lines",
-        # "name": "Downwelling Solar - Penn State",
         "name": plotTitle,
         "type": "scatter"
     }
     data = Data([trace1])
     layout = {
-        # "title": "Downwelling Solar for Penn State on January 1, 2017",
         "title": plotTitle,
         "xaxis": {
             "autorange": True,
@@ -159,7 +135,6 @@ def plot_graph():
         },
         "yaxis": {
             "autorange": True,
-            # "title": "Downwelling Solar Radiation (W/m^2)",
             "title": dataNameInput,
             "type": "linear"
         }

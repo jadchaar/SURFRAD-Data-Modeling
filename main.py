@@ -4,7 +4,7 @@ import os
 from plotting import plot_graph
 import sys
 
-print('Checking for and generating required dependencies if necessary...\n')
+print('Checking for required dependencies...\n')
 
 fileContents = os.listdir(os.getcwd())
 fileContents = set(fileContents)
@@ -15,7 +15,7 @@ if fileContents.isdisjoint(checkNames):
 else:
     while True:
         try:
-            jsonOverride = str(input('Previously generated dictionaries found. Override? (y/n) '))
+            jsonOverride = str(input('Existing dependencies found. Override? (y/n) '))
         except ValueError:
             print('Error: Please input a valid option (y/n)!')
             continue
@@ -70,18 +70,12 @@ while True:
         print('Error: Please input a valid option (y/n)!')
         continue
     elif anotherPlot in {'y', 'Y', 'YES', 'yes', 'Yes'}:
-        break
+        print('Initiating plotting program...')
+        plot_graph()
+        continue
     elif anotherPlot in {'n', 'N', 'NO', 'no', 'No'}:
-        break
+        print('Exiting program...')
+        sys.exit(0)
     else:
         print('Error: Please input a valid option (y/n)!')
         continue
-
-if anotherPlot in {'y', 'Y', 'YES', 'yes', 'Yes'}:
-    print('Initiating plotting program...')
-    plot_graph()
-else:
-    print('Exiting program...')
-    sys.exit(0)
-
-p.terminate()
